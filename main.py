@@ -38,24 +38,18 @@ async def on_message(msg):
 
 @client.event
 async def on_raw_reaction_add(payload):
-    print(msg_id)
     message_id = payload.message_id
     guild_id = payload.guild_id
     guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
     if message_id == msg_id:
-        print(f'Reaction added: {payload.emoji.name}')
         if payload.emoji.name == '✅':
             role = discord.utils.get(guild.roles, name='Check')
 
             if role is not None:
-                print(f'Role is not empty, Role is {role}')
                 user = discord.utils.find(lambda u: u.id == payload.user_id, guild.members)
                 if user is not None:
-                    print(f'User is not empty, User is {user}')
-                    print(user.roles)
                     await user.add_roles(role)
-                    print(f'Role: {role} added')
                 else:
                     print('User is empty')
 
@@ -67,17 +61,13 @@ async def on_raw_reaction_remove(payload):
     guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
 
     if message_id == msg_id:
-        print(f'Reaction removed: {payload.emoji.name}')
         if payload.emoji.name == '✅':
             role = discord.utils.get(guild.roles, name='Check')
 
             if role is not None:
-                print(f'Role is not empty, Role is {role}')
                 user = discord.utils.find(lambda u: u.id == payload.user_id, guild.members)
                 if user is not None:
-                    print(f'User is not empty, User is {user}')
                     await user.remove_roles(role)
-                    print(f'Role: {role} removed')
                 else:
                     print('User is empty')
 
