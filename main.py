@@ -6,7 +6,7 @@ from discord import Client
 intents = discord.Intents.all()
 client = Client(intents=intents)
 msg_id = None
-
+whitelist = 'Test'
 
 embed = discord.Embed(
         title='Добро пожаловать в Wheel AIO',
@@ -23,12 +23,17 @@ async def on_ready():
 @client.event
 async def on_message(msg):
     if msg.content == 'Roles':
-        global msg_id
-        channel = client.get_channel(msg.channel.id)
-        wh = await channel.send(embed=embed)
-        await wh.add_reaction('✅')
-        msg_id = wh.id
-        await msg.delete()
+        guild_id = msg.guild.id
+        guild = discord.utils.find(lambda g: g.id == guild_id, client.guilds)
+        user = discord.utils.find(lambda u: u.id == msg.author.id, guild.members)
+        for role in user.roles:
+            if str(role) == whitelist:
+                global msg_id
+                channel = client.get_channel(msg.channel.id)
+                wh = await channel.send(embed=embed)
+                await wh.add_reaction('✅')
+                msg_id = wh.id
+                await msg.delete()
 
 
 @client.event
